@@ -4,7 +4,20 @@ services:
 
   nginx:
     image: nginx
-    ports:
-      - 80:80
+    container_name: plant-helper-node
     volumes:
       - ./html:/usr/share/nginx/html
+        
+    networks:
+      - proxy
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.site-secure.entrypoints=websecure"
+      - "traefik.http.routers.site-secure.rule=Host(`bogdashkino.ru`)"
+
+      
+networks:
+  proxy:
+    external: true
